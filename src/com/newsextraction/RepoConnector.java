@@ -1,3 +1,10 @@
+/* 	News Extraction and Summarization
+		Final Year Project
+		Authors:
+			106113001 Abha Suman
+			106113032 Hariprasad KR
+			106113043 Kailash Karthik
+*/
 package com.newsextraction;
 
 import java.io.IOException;
@@ -12,6 +19,7 @@ public class RepoConnector {
 	final static Charset ENCODING = StandardCharsets.UTF_8;
 	static String filePath = "C:\\Users\\User\\Desktop\\8th Semester\\Project\\NewsHtmlFiles\\";
 	
+	//Function to read the contents of a file given its path
 	static String readFile(String aFileName) throws IOException {
 		String fileContents = new String();
 		Path path = Paths.get(aFileName);
@@ -23,6 +31,7 @@ public class RepoConnector {
 		return fileContents;
 	}
 	
+	//Function to fetch the HTML file from file repository given the article ID
 	public static String getHtmlGivenId(int aId) {
 		String htmlFilePath = filePath + aId + ".html";
 		try {
@@ -33,7 +42,8 @@ public class RepoConnector {
 		}
 		return null;
 	}
-	
+
+	//Function to fetch the text file from file repository given the article ID
 	public static String getTextGivenId(int aId) {
 		String htmlFilePath = filePath + aId + ".txt";
 		try {

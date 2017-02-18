@@ -1,4 +1,4 @@
-<!-- 	News Extraction and Summarisation
+<!-- 	News Extraction and Summarization
 		Final Year Project
 		Authors:
 			106113001 Abha Suman
@@ -16,12 +16,10 @@
 			Embedded JavaScript to handle click event and errors
 		-->
 		<script type="text/javascript">
-			
 			//Global variables
 			var query;
 			var searchCategory;
 			var searchSource;
-			
 			//To handle click event for Submit button
 			function buttonSubmit() {
 				//Get Query
@@ -47,32 +45,29 @@
 				}
 				return true;
 			}
-			
 		</script>
 	</head>
 	<body>
-		
 		<!-- 
 			Alert for displaying empty query error
 		-->
 		<div class="alert alert-danger" id="queryAlert" style="display: none">
 		  <strong>Error!</strong> Query should not be empty
 		</div>
-		
 		<!-- 
 			Header of Page
 		-->
-		<div class="row">			
-			<div class="col-md-6 col-sm-6 col-sm-offset-3 col-md-offset-3">
-				<h3 style="text-align:center">News Summary</h3>
+		<div class="jumbotron">
+			<div class="row">
+				<div class="col-sm-12" style="text-align:center">
+					<h1>News Summary</h1>
+				</div>
 			</div>
 		</div>
-		
 		<!-- 
 			Form for user preferences
 		 -->
-		<form id="submitForm" action="Summary.jsp" onsubmit="return buttonSubmit()">			
-			
+		<form id="submitForm" action="Redirect.jsp" onsubmit="return buttonSubmit()">			
 			<!-- 
 				Search Box for the user Query
 			-->		
@@ -84,7 +79,6 @@
 					</div>
 				</div>
 			</div>
-			
 			<!-- 
 				User Search Options
 			-->
@@ -95,22 +89,26 @@
 				<div class="col-md-3 col-sm-3 col-sm-offset-2 col-md-offset-2">				
 					<h5 style="text-align:center">News Category</h5>
 					<div class="radio">
+					  <label><input type="radio" name="optNewsCat" id="optNewsAll" value="0" checked>All</label>
+					</div>
+					<div class="radio">
 					  <label><input type="radio" name="optNewsCat" id="optNewsCatEntertainment" value="1">Entertainment</label>
 					</div>
 					<div class="radio">
-					  <label><input type="radio" name="optNewsCat" id="optNewsCatSports" value="2" checked>Sports</label>
+					  <label><input type="radio" name="optNewsCat" id="optNewsCatSports" value="2">Sports</label>
 					</div>
 					<div class="radio ">
 					  <label><input type="radio" name="optNewsCat" id="optNewsCatBusiness" value="3">Business</label>
 					</div>
 				</div>
 				<!-- 
-					Dropdown menu to select source of news
+					Drop down menu to select source of news
 				-->
 				<div class="col-md-3 col-sm-3 col-sm-offset-2 col-md-offset-2">
 					<div class="form-group" style="text-align:center;">
 					  <label for="selNewsSite">News Site</label>
 					  <select class="form-control" id="selNewsSite" name="selNewsSite" style="margin:auto;display:block;">
+						<option value="0">All</option>
 						<option value="1">The Hindu</option>
 						<option value="2">Deccan Chronicle</option>
 						<option value="3">Times of India</option>
@@ -118,7 +116,6 @@
 					</div>				
 				</div>
 			</div>	
-			
 			<!-- 
 				Submit button to perform news extraction and summarization
 			-->		
@@ -127,7 +124,6 @@
 					<button type="submit" class="btn btn-primary" style="margin:auto;display:block;" id="btnSubmit">Submit</button>				
 				</div>
 			</div>
-			
 		</form>
 	</body>
 </html>

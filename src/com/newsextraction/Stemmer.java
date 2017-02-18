@@ -1,34 +1,13 @@
-package com.newsextraction;
-/*
-   Porter stemmer in Java. The original paper is in
-       Porter, 1980, An algorithm for suffix stripping, Program, Vol. 14,
-       no. 3, pp 130-137,
-   See also http://www.tartarus.org/~martin/PorterStemmer
-   History:
-   Release 1
-   Bug 1 (reported by Gonzalo Parra 16/10/99) fixed as marked below.
-   The words 'aed', 'eed', 'oed' leave k at 'a' for step 3, and b[k-1]
-   is then out outside the bounds of b.
-   Release 2
-   Similarly,
-   Bug 2 (reported by Steve Dyrdahl 22/2/00) fixed as marked below.
-   'ion' by itself leaves j = -1 in the test for 'ion' in step 5, and
-   b[j] is then outside the bounds of b.
-   Release 3
-   Considerably revised 4/9/00 in the light of many helpful suggestions
-   from Brian Goetz of Quiotix Corporation (brian@quiotix.com).
-   Release 4
+/* 	News Extraction and Summarization
+		Final Year Project
+		Authors:
+			106113001 Abha Suman
+			106113032 Hariprasad KR
+			106113043 Kailash Karthik
 */
+package com.newsextraction;
 
-/**
-  * Stemmer, implementing the Porter Stemming Algorithm
-  *
-  * The Stemmer class transforms a word into its root form.  The input
-  * word can be provided a character at time (by calling add()), or at once
-  * by calling one of the various stem(something) methods.
-  */
-
-class Stemmer
+public class Stemmer
 {  private char[] b;
    private int i,     /* offset into b */
                i_end, /* offset to end of stemmed word */
@@ -45,7 +24,6 @@ class Stemmer
     * Add a character to the word being stemmed.  When you are finished
     * adding characters, you can call stem(void) to stem the word.
     */
-
    public void add(char ch)
    {  if (i == b.length)
       {  char[] new_b = new char[i+INC];
@@ -60,7 +38,6 @@ class Stemmer
     * of a char[] array. This is like repeated calls of add(char ch), but
     * faster.
     */
-
    public void add(char[] w, int wLen)
    {  if (i+wLen >= b.length)
       {  char[] new_b = new char[i+wLen+INC];
@@ -90,7 +67,6 @@ class Stemmer
    public char[] getResultBuffer() { return b; }
 
    /* cons(i) is true <=> b[i] is a consonant. */
-
    private final boolean cons(int i)
    {  switch (b[i])
       {  case 'a': case 'e': case 'i': case 'o': case 'u': return false;
@@ -106,9 +82,7 @@ class Stemmer
          <c>vc<v>     gives 1
          <c>vcvc<v>   gives 2
          <c>vcvcvc<v> gives 3
-         ....
    */
-
    private final int m()
    {  int n = 0;
       int i = 0;
@@ -135,14 +109,12 @@ class Stemmer
    }
 
    /* vowelinstem() is true <=> 0,...j contains a vowel */
-
    private final boolean vowelinstem()
    {  int i; for (i = 0; i <= j; i++) if (! cons(i)) return true;
       return false;
    }
 
    /* doublec(j) is true <=> j,(j-1) contain a double consonant. */
-
    private final boolean doublec(int j)
    {  if (j < 1) return false;
       if (b[j] != b[j-1]) return false;
@@ -155,7 +127,6 @@ class Stemmer
          cav(e), lov(e), hop(e), crim(e), but
          snow, box, tray.
    */
-
    private final boolean cvc(int i)
    {  if (i < 2 || !cons(i) || cons(i-1) || !cons(i-2)) return false;
       {  int ch = b[i];
@@ -175,7 +146,6 @@ class Stemmer
 
    /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
       k. */
-
    private final void setto(String s)
    {  int l = s.length();
       int o = j+1;
@@ -184,7 +154,6 @@ class Stemmer
    }
 
    /* r(s) is used further down. */
-
    private final void r(String s) { if (m() > 0) setto(s); }
 
    /* step1() gets rid of plurals and -ed or -ing. e.g.
@@ -203,7 +172,6 @@ class Stemmer
           messing   ->  mess
           meetings  ->  meet
    */
-
    private final void step1()
    {  if (b[k] == 's')
       {  if (ends("sses")) k -= 2; else
@@ -227,13 +195,11 @@ class Stemmer
    }
 
    /* step2() turns terminal y to i when there is another vowel in the stem. */
-
    private final void step2() { if (ends("y") && vowelinstem()) b[k] = 'i'; }
 
    /* step3() maps double suffices to single ones. so -ization ( = -ize plus
       -ation) maps to -ize etc. note that the string before the suffix must give
       m() > 0. */
-
    private final void step3() { if (k == 0) return; /* For Bug 1 */ switch (b[k-1])
    {
        case 'a': if (ends("ational")) { r("ate"); break; }
@@ -267,7 +233,6 @@ class Stemmer
    } }
 
    /* step4() deals with -ic-, -full, -ness etc. similar strategy to step3. */
-
    private final void step4() { switch (b[k])
    {
        case 'e': if (ends("icate")) { r("ic"); break; }
@@ -284,7 +249,6 @@ class Stemmer
    } }
 
    /* step5() takes off -ant, -ence etc., in context <c>vcvc<v>. */
-
    private final void step5()
    {   if (k == 0) return; /* for Bug 1 */ switch (b[k-1])
        {  case 'a': if (ends("al")) break; return;
@@ -315,7 +279,6 @@ class Stemmer
    }
 
    /* step6() removes a final -e if m() > 1. */
-
    private final void step6()
    {  j = k;
       if (b[k] == 'e')
@@ -335,7 +298,7 @@ class Stemmer
       if (k > 1) { step1(); step2(); step3(); step4(); step5(); step6(); }
       i_end = k+1; i = 0;
    }
-   
+   //Function to stem a given sentence
    public String stem(String s) {
 	   for(char c : s.toCharArray()) {
 		   add(c);
@@ -343,4 +306,15 @@ class Stemmer
 	   stem();
 	   return toString();
    }
+
+   //Function to stem the words of a given sentence
+   public static String stemSentence(String sentence) {
+	   String words[] = sentence.split(" ");
+	   Stemmer stemmer = new Stemmer();
+	   for(int i=0;i<words.length;i++) {
+		   words[i] = stemmer.stem(words[i]).toString();
+	   }
+	   return String.join(" ", words);
+   }
+   
 }

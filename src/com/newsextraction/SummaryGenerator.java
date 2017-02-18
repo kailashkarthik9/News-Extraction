@@ -1,3 +1,10 @@
+/* 	News Extraction and Summarization
+		Final Year Project
+		Authors:
+			106113001 Abha Suman
+			106113032 Hariprasad KR
+			106113043 Kailash Karthik
+*/
 package com.newsextraction;
 
 import java.io.File;
@@ -17,6 +24,7 @@ public class SummaryGenerator {
 	final static Charset ENCODING = StandardCharsets.UTF_8;
 	static String baseLocation = "C:\\Users\\User\\Desktop\\8th Semester\\Project\\NewsSearch\\Template\\";
 	
+	//Function to read the contents of a file given its path
 	static String readFile(String aFileName) throws IOException {
 		String fileContents = new String();
 		Path path = Paths.get(aFileName);
@@ -28,6 +36,7 @@ public class SummaryGenerator {
 		return fileContents;
 	}
 	
+	//Function to read the template documents for summary generation
 	public static void readFiles() {
 		try {
 			template1 = readFile(baseLocation+"template1.txt");
@@ -39,12 +48,14 @@ public class SummaryGenerator {
 		}
 	}
 	
-	//For the urls array, remove the ' ' in the url string. It is showing some error
+	//Function to generate summary page given a list of relevant article information
 	public static void getSummary(String[] titles, String[] texts, String[] urls, String query) {
 		readFiles();
-		template1 = template1.replace("$Query", query);
+		//Edit the header template and add to output
+		template1 = template1.replace("$Query", query.toUpperCase());
 		String htmlText = template1;
 		int i;
+		//For each article, edit the body template and add to output
 		for(i=0;i<titles.length;i++) {
 			String templateText = template2;
 			templateText = templateText.replace("$title", titles[i]);
@@ -52,7 +63,9 @@ public class SummaryGenerator {
 			templateText = templateText.replace("$url", urls[i]);
 			htmlText = htmlText + templateText;
 		}
+		//Edit the footer template and add to output
 		htmlText = htmlText + template3;
+		//Write the output to a summary html page
     	File  fileHtml = new File("C:\\Users\\User\\Desktop\\8th Semester\\Project\\NewsSearch\\Results\\summary.html");
     	Boolean fileCreated = false;
     	try {
