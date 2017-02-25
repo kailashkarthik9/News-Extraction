@@ -5,7 +5,7 @@
 			106113032 Hariprasad KR
 			106113043 Kailash Karthik
 -->
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="java.io.*,java.util.*,com.newsextraction.*,java.sql.*, java.util.stream.Collectors"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="java.io.*,java.util.*,com.newsextraction.*,java.sql.*, java.util.stream.Collectors, java.awt.*"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -14,12 +14,14 @@
 		<title>Summary View</title>
 		<link rel="stylesheet" href="bootstrap.min.css" type="text/css" />
 		<script type="text/javascript">
+			var timer;
 			//Function called every second to update countdown timer
 			function changeTime() {
 				var time = parseInt(document.getElementById("timeLeft").innerHTML);
 				if(time>0)
 					time--;
 				else {
+					clearInterval(timer);
 					window.setTimeout(function(){
 				        // Redirect to Query page once countdown timer expires
 				        window.location.href = "http://localhost:8080/NewsExtraction/Query.jsp";
@@ -29,7 +31,7 @@
 			}
 			//Create an interval to update time every second
 			function start() {
-				setInterval(changeTime,1000);	
+				timer = setInterval(changeTime,1000);	
 			}
 		</script>
 	</head>
@@ -48,7 +50,7 @@
 			Countdown timer
 		-->
 		<div style="text-align:center">
-			<span>You results will be ready in</span>
+			<span>You will be redirected in </span>
 			<span id="timeLeft">3</span>
 			<span>second(s)</span>	
 		</div>
@@ -79,6 +81,7 @@
 			}
 		//Call summary generator function
 		SummaryGenerator.getSummary(title.toArray(new String[title.size()]), text.toArray(new String[text.size()]), url.toArray(new String[url.size()]), orgSearchQuery);
+		OpenFile.openSummary();
 		%>
 	</body>
 </html>

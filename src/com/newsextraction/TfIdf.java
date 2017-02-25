@@ -78,7 +78,7 @@ public class TfIdf {
 			words = Stemmer.stemSentence(sentences[s]);
 			for(i=0;i<synset.length;i++) {
 				for(j=0;j<synset[i].length;j++) {
-					if(words.contains(synset[i][j])) {
+					if(words.toLowerCase().contains(synset[i][j].toLowerCase())) {
 						count[s]++;
 						thresholdCount++;
 					}
