@@ -54,4 +54,16 @@ public class RepoConnector {
 		}
 		return null;
 	}
+	
+	//Function to fetch the resolved text file from file repository given the article ID
+		public static String getResolvedTextGivenId(int aId) {
+			String htmlFilePath = filePath + aId + "-resolved.txt";
+			try {
+				return readFile(htmlFilePath);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
 }

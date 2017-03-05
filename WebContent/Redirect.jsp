@@ -76,7 +76,7 @@
 		//For each relevant artivle fetch the title, news text and URL
 		for(int i=0; i<relevantAid.size(); i++) {
 			title.add(dbConnector.getTitleGivenId(relevantAid.get(i)));
-			text.add(TfIdf.getSummary(RepoConnector.getTextGivenId(relevantAid.get(i)), synset));
+			text.add(TfIdf.getSummary(relevantAid.get(i), synset));
 			url.add(dbConnector.getUrlGivenId(relevantAid.get(i)));
 			}
 		//Call summary generator function

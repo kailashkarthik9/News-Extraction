@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class TfIdf {
 	//Regular Expression constants for End of Sentence detection
-	static final String PREFIXES = "(Mt|Mr|St|Mrs|Ms|Dr)([.])";
+	static final String PREFIXES = "(Mt|Mr|St|Mrs|Ms|Dr|Col|Capt|Hon|Maj|Prof|Pres|Sr|Jr|Gen|Genl|Sgt|Lt|Maj|Ave|Jn)([.])";
 	static final String WEBSITES = "([.])(edu|com|net|org|io|gov)";
 	static final String CAPS = "([A-Z])";
 	static final String SUFFIXES = "(etc|Inc|Ltd|Jr|Sr|Co)";
@@ -54,8 +54,11 @@ public class TfIdf {
 	}
 	
 	//Function to generate summary from the input text using the TF-IDF algorithm on the keyword-synset
-	public static String getSummary(String text, String[][] synset) {
+	public static String getSummary(int relevantAid, String[][] synset) {
+		String text = RepoConnector.getResolvedTextGivenId(relevantAid);
+		String originalText = RepoConnector.getTextGivenId(relevantAid);
 		String[] sentences = getSentences(text);
+		String[] originalSentences = getSentences(originalText);
 		int[] count = new int[sentences.length];
 		ArrayList<String> summary = new ArrayList<>();
 		int i;
@@ -94,10 +97,10 @@ public class TfIdf {
 				if(!sentences[i].toLowerCase().contains("the times of india") &&
 					!sentences[i].toLowerCase().contains("the hindu") &&
 					!sentences[i].toLowerCase().contains("deccan chronicle")) {
-					summary.add(sentences[i]);
+					summary.add(originalSentences[i]);
 				}
 			}
 		}
-		return String.join(" ", summary);
+		return String.join(" ", summary).trim();
 	}
 }

@@ -19,6 +19,7 @@ public class DbConnector {
 	//Global JDBC parameters
 	static Connection c;
 	static Statement s;
+	static Statement s2;
 	static ArrayList<Integer> arrayList;
 	
 	//Constructor establishes initial JDBC environment
@@ -26,7 +27,8 @@ public class DbConnector {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			c = DriverManager.getConnection("jdbc:mysql://localhost:3306/NewspaperExtraction?useSSL=false","root","btech");
-			s = c.createStatement();	
+			s = c.createStatement();
+			s2 = c.createStatement();
 			arrayList = new ArrayList<>();
 		} catch (ClassNotFoundException | SQLException e) {			
 			e.printStackTrace();
@@ -42,7 +44,6 @@ public class DbConnector {
 				return r.getString("title");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null; 
@@ -57,12 +58,47 @@ public class DbConnector {
 				return r.getString("url");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null; 
 	}
 	
+	//Given Article fetch the tags of the article corresponding to it
+	public String getTagsGivenId(int aId) {
+		ResultSet r;
+		try {
+			r = s2.executeQuery("Select tagText From Tags where aid=" + aId);
+			while(r.next()) {
+				return r.getString("tagText");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ""; 
+	}
+	
+	//Split tags from tag array
+	public String[] separateTags(String tagSet) {
+		String[] tags = tagSet.split(",");
+		for(int i=0;i<tags.length;i++) {
+			tags[i] = tags[i].trim();
+		}
+		return tags;
+	}
+	
+	//Function to merge two String arrays
+	public static String[] merge(String[] arr1, String[] arr2) {
+		String[] arr3 = new String[arr1.length + arr2.length];
+		for(int j=0;j<arr2.length;j++) {
+			if(arr2[j].isEmpty()) {
+				arr2[j] = "qwerty";
+			}
+		}
+		for(int i =0;i<arr3.length;i++)
+		    arr3[i] = (i<arr1.length)?arr1[i]:arr2[i-arr1.length];
+		return arr3;
+	}
+		
 	//Get a list of article IDs relevant to the user query parameters
 	public ArrayList<Integer> getRelevantArticles(int userCid, int userNid, String[][] synset) {
 		ResultSet r;
@@ -86,15 +122,18 @@ public class DbConnector {
 			while(r.next()) {
 				int aId = r.getInt("aId");
 				String title = r.getString("title");
+				String tset = getTagsGivenId(aId);
+				title = title + tset.replaceAll(",", " ");
+				String[] tags = this.separateTags(tset);
 				int flag1=0;
 				int flag2=1;
 				for(int i=0; i<synset.length; i++) {
 					flag1=0;
 					for(int j=0; j<synset[i].length; j++) {
-							if(title.toLowerCase().contains(synset[i][j].toLowerCase())) {
-								flag1 =1;
-								break;
-							}
+						if(title.toLowerCase().contains(synset[i][j].toLowerCase())) {
+							flag1 =1;
+							break;
+						}
 					}
 					if(flag1==0) {
 						flag2=0;
@@ -103,10 +142,12 @@ public class DbConnector {
 				}
 				if(flag2 ==1) {
 					arrayList.add(aId);
+					for(int i=0;i<synset.length;i++) {
+						synset[i] = merge(synset[i], tags);
+					}
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		return arrayList;
