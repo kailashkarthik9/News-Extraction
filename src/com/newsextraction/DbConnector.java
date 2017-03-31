@@ -7,12 +7,17 @@
 */
 package com.newsextraction;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.fluent.Request;
 
 public class DbConnector {
 
@@ -47,6 +52,35 @@ public class DbConnector {
 			e.printStackTrace();
 		}
 		return null; 
+	}
+	
+	//Given Article Title fetch the ID of the article corresponding to it
+	public int getIdGivenTitle(String title) {
+		ResultSet r;
+		try {
+			r = s.executeQuery("Select aid From Articles where title='" + title + "'");
+			while(r.next()) {
+				return r.getInt("aId");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1; 
+	}
+	
+	//Given Article fetch the title of the article corresponding to it
+	public ArrayList<String> getAllArticles() {
+		ResultSet r;
+		ArrayList<String> titleList = new ArrayList<>();
+		try {
+			r = s.executeQuery("Select title From Articles");
+			while(r.next()) {
+				titleList.add(r.getString("title"));	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return titleList; 
 	}
 	
 	//Given Article fetch the url of the article corresponding to it
@@ -151,5 +185,19 @@ public class DbConnector {
 			e.printStackTrace();
 		} 
 		return arrayList;
+	}
+	
+	//Function to perform test on system
+	public static void getTestResults() throws ClientProtocolException, IOException {
+		ArrayList<String> titleList = new DbConnector().getAllArticles();
+		//For every article, perform a HTTP GET request with article title as query parameter
+		for(String title: titleList) {
+			Request.Get("http://localhost:8080/NewsExtraction/Redirect.jsp?searchQuery="+ URLEncoder.encode(title, "UTF-8") +"&optNewsCat=0&selNewsSite=0").execute().returnContent();
+		}
+	}
+
+	//Main method for getting test results
+	public static void main(String[] args) throws ClientProtocolException, IOException {
+		getTestResults();
 	}
 }

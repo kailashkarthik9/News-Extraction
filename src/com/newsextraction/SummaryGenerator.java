@@ -1,4 +1,4 @@
-/* 	News Extraction and Summarization
+/* 	Contextual Query-Driven News Summarization
 		Final Year Project
 		Authors:
 			106113001 Abha Suman
@@ -49,12 +49,16 @@ public class SummaryGenerator {
 	}
 	
 	//Function to generate summary page given a list of relevant article information
-	public static void getSummary(String[] titles, String[] texts, String[] urls, String query) {
+	public static void getSummary(String[] titles, String[] texts, String[] urls, String query) throws IOException {
 		readFiles();
 		//Edit the header template and add to output
 		template1 = template1.replace("$Query", query.toUpperCase());
 		String htmlText = template1;
 		int i;
+		
+		String requiredSummary = "";
+		int requiredId = -1;
+		
 		//For each article, edit the body template and add to output
 		for(i=0;i<titles.length;i++) {
 			String templateText = template2;
@@ -62,6 +66,17 @@ public class SummaryGenerator {
 			templateText = templateText.replace("$text", texts[i]);
 			templateText = templateText.replace("$url", urls[i]);
 			htmlText = htmlText + templateText;
+			if(titles[i].equalsIgnoreCase(query)) {
+				requiredSummary = texts[i];
+				requiredId = new DbConnector().getIdGivenTitle(titles[i]);
+				if(requiredId>0) {
+					File file = new File("C:\\Users\\User\\Desktop\\8th Semester\\Project\\NewsHtmlFiles\\"+requiredId+"-result.txt");
+					file.createNewFile();
+					PrintWriter writer = new PrintWriter(file, "UTF-8");
+	    		    writer.println(requiredSummary);
+	    		    writer.close();
+				}
+			}
 		}
 		//Edit the footer template and add to output
 		htmlText = htmlText + template3;

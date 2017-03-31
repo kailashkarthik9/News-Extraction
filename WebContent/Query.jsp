@@ -1,14 +1,14 @@
-<!-- 	News Extraction and Summarization
+<!-- 	Contextual Query-Driven News Summarization
 		Final Year Project
 		Authors:
 			106113001 Abha Suman
 			106113032 Hariprasad KR
 			106113043 Kailash Karthik
 -->
+<%@page import="com.newsextraction.DbConnector"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-
 <html lang="en">
 	<head>
 		<link rel="stylesheet" href="bootstrap.min.css" type="text/css" />

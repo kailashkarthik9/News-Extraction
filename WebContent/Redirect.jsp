@@ -1,4 +1,4 @@
-<!-- 	News Extraction and Summarization
+<!-- 	Contextual Query-Driven News Summarization
 		Final Year Project
 		Authors:
 			106113001 Abha Suman
@@ -73,14 +73,16 @@
 		ArrayList<String> url = new ArrayList<String>();
 		DbConnector dbConnector = new DbConnector();
 		String stemmedTitleString = new String();
+		TfIdf tfIdf = new TfIdf();
 		//For each relevant artivle fetch the title, news text and URL
 		for(int i=0; i<relevantAid.size(); i++) {
 			title.add(dbConnector.getTitleGivenId(relevantAid.get(i)));
-			text.add(TfIdf.getSummary(relevantAid.get(i), synset));
+			text.add(tfIdf.getSummary(relevantAid.get(i), synset));
 			url.add(dbConnector.getUrlGivenId(relevantAid.get(i)));
 			}
 		//Call summary generator function
 		SummaryGenerator.getSummary(title.toArray(new String[title.size()]), text.toArray(new String[text.size()]), url.toArray(new String[url.size()]), orgSearchQuery);
+		//Open Summary page in browser
 		OpenFile.openSummary();
 		%>
 	</body>
