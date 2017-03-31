@@ -1,20 +1,23 @@
 # News Extraction
 
-News Extraction is the onlin phase of the News Extraction and Summarization project
+News Extraction is the online phase of the News Extraction and Summarization project
 
 ## Tech
 News Extraction uses a number of open source projects to work properly:
 
 * [JAWS](https://github.com/jaytaylor/jaws) - an open source API for integrating WordNet in Java
 * [Apache Tomcat](http://tomcat.apache.org/) - an open-source Java Servlet Container
+* [HTTP Components](https://hc.apache.org/) - a toolset of low level Java components focused on HTTP and associated protocols
 
 ## Installation
 News Crawler requires the following JARs to run
 * jaws-1.3.1.jar
+* All JARs present in HTTPComponents
 
 ## Instructions
 
 ```sh
+- Make sure you have downloaded, configured and executed the NewsCrawler project
 - Download the dependencies and import the project on eclipse
 - Right click on project -> Build Path -> Configure Build Path -> Libraries 
 - Add the JAR to the class path
